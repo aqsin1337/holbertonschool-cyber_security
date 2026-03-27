@@ -4,22 +4,23 @@ if [ "$#" -ne 1 ]; then
     echo "Usage: manage_my_process {start|stop|restart}"
     exit 1
 fi
+
 case "$1" in
     start)
         ./manage_my_process &
-        echo $! > /var/run/my_process.pid
+        echo $! > /tmp/my_process.pid
         echo "manage_my_process started"
         ;;
     stop)
         pkill -f "^./manage_my_process"
-        rm /var/run/my_process.pid 2>/dev/null
+        rm /tmp/my_process.pid 2>/dev/null
         echo "manage_my_process stopped"
         ;;
     restart)
         pkill -f "^./manage_my_process"
-        rm /var/run/my_process.pid 2>/dev/null
+        rm /tmp/my_process.pid 2>/dev/null
         ./manage_my_process &
-        echo $! > /var/run/my_process.pid
+        echo $! > /tmp/my_process.pid
         echo "manage_my_process restarted"
         ;;
     *)

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Becomes a daemon and writes to a file
+# Writes "I am alive!" to a file indefinitely
 while true; do
     echo "I am alive!" >> /tmp/my_process
     sleep 2
