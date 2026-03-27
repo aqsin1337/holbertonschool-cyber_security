@@ -8,23 +8,23 @@ fi
 case "$1" in
     start)
         ./manage_my_process &
-        PID=$!
-        echo "$PID" > /var/run/my_process.pid
-        echo "$PID" > /tmp/my_process.pid
+        echo $! > /var/run/my_process.pid
         echo "manage_my_process started"
         ;;
     stop)
-        pkill -f "^./manage_my_process"
-        rm /var/run/my_process.pid /tmp/my_process.pid 2>/dev/null
+        if [ -f /var/run/my_process.pid ]; then
+            kill "$(cat /var/run/my_process.pid)"
+            rm /var/run/my_process.pid
+        fi
         echo "manage_my_process stopped"
         ;;
     restart)
-        pkill -f "^./manage_my_process"
-        rm /var/run/my_process.pid /tmp/my_process.pid 2>/dev/null
+        if [ -f /var/run/my_process.pid ]; then
+            kill "$(cat /var/run/my_process.pid)"
+            rm /var/run/my_process.pid
+        fi
         ./manage_my_process &
-        PID=$!
-        echo "$PID" > /var/run/my_process.pid
-        echo "$PID" > /tmp/my_process.pid
+        echo $! > /var/run/my_process.pid
         echo "manage_my_process restarted"
         ;;
     *)
