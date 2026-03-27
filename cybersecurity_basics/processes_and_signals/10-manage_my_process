@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Manages the manage_my_process daemon
+
 if [ "$#" -ne 1 ]; then
     echo "Usage: manage_my_process {start|stop|restart}"
     exit 1
@@ -8,23 +9,23 @@ fi
 case "$1" in
     start)
         ./manage_my_process &
-        echo $! > /var/run/my_process.pid
+        PID=$!
+        echo "$PID" > /var/run/my_process.pid
+        echo "$PID" > /tmp/my_process.pid
         echo "manage_my_process started"
         ;;
     stop)
-        if [ -f /var/run/my_process.pid ]; then
-            kill "$(cat /var/run/my_process.pid)"
-            rm /var/run/my_process.pid
-        fi
+        pkill -f "manage_my_process$"
+        rm -f /var/run/my_process.pid /tmp/my_process.pid
         echo "manage_my_process stopped"
         ;;
     restart)
-        if [ -f /var/run/my_process.pid ]; then
-            kill "$(cat /var/run/my_process.pid)"
-            rm /var/run/my_process.pid
-        fi
+        pkill -f "manage_my_process$"
+        rm -f /var/run/my_process.pid /tmp/my_process.pid
         ./manage_my_process &
-        echo $! > /var/run/my_process.pid
+        PID=$!
+        echo "$PID" > /var/run/my_process.pid
+        echo "$PID" > /tmp/my_process.pid
         echo "manage_my_process restarted"
         ;;
     *)
