@@ -1,6 +1,3 @@
-#!/usr/bin/env bash
-# Manages the manage_my_process daemon
-
 if [ "$#" -ne 1 ]; then
     echo "Usage: manage_my_process {start|stop|restart}"
     exit 1
@@ -13,12 +10,13 @@ case "$1" in
         echo "manage_my_process started"
         ;;
     stop)
-        pkill -f manage_my_process
+        # Yalnız əsas skripti öldür, idarəetmə skriptinə toxunma
+        pkill -f "^./manage_my_process"
         rm /var/run/my_process.pid 2>/dev/null
         echo "manage_my_process stopped"
         ;;
     restart)
-        pkill -f manage_my_process
+        pkill -f "^./manage_my_process"
         rm /var/run/my_process.pid 2>/dev/null
         ./manage_my_process &
         echo $! > /var/run/my_process.pid
