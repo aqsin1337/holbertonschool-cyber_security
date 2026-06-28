@@ -1,2 +1,2 @@
 #!/bin/bash
-curl -s -H "Host: $1" -d "$3" "$2"
+curl -X POST "$2" -H "HOST: $1" -d "$3"
